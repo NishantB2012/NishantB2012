@@ -1,0 +1,306 @@
+package com.example.practicelab1;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+
+    int numPassengers ;
+    String destination;
+
+
+    private EditText etTickets;
+    private Spinner spinner;
+    private Button computeCostBtn;
+    private TextView output_text;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etTickets = findViewById(R.id.etTickets);
+        spinner = findViewById(R.id.spinner);
+        output_text = findViewById(R.id.output_text);
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // use those elements that you need to save.
+
+        outState.putString("destination", destination);
+        outState.putInt("numPassengers", numPassengers);
+    }
+
+
+
+
+    public void ComputeCost(View view) {
+        numPassengers = Integer.parseInt(etTickets.getText().toString());
+        destination = spinner.getSelectedItem().toString();
+        double cost = 0;
+        switch (destination) {
+            case "To Catalina Island":
+                cost = numPassengers * 34.00;
+                break;
+            case "To Long Beach":
+                cost = numPassengers * 40.00;
+                break;
+
+        }
+
+        output_text.setText("One way trip to " + destination + " for " + numPassengers + " passengers: $" + cost);
+        output_text.setVisibility(View.VISIBLE);
+    }
+
+
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            destination = savedInstanceState.getString("destination", "");
+            numPassengers = savedInstanceState.getInt("numPassengers", 0);
+
+            double cost = 0;
+
+            switch (destination) {
+                case "To Catalina Island":
+                    cost = numPassengers * 34.00;
+                    break;
+                case "To Long Beach":
+                    cost = numPassengers * 40.00;
+                    break;
+
+            }
+
+
+            etTickets.setText(String.valueOf(numPassengers));
+            output_text.setText("One way trip to " + destination + " for " + numPassengers + " passengers: $" + cost);
+
+        }
+
+    }
+
+}
+
+
+
+
+
+package com.example.practicelab1;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+
+    int numPassengers ;
+    String destination;
+
+
+    private EditText etTickets;
+    private Spinner spinner;
+    private Button computeCostBtn;
+    private TextView output_text;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etTickets = findViewById(R.id.etTickets);
+        spinner = findViewById(R.id.spinner);
+        output_text = findViewById(R.id.output_text);
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // use those elements that you need to save.
+
+        outState.putString("destination", destination);
+        outState.putInt("numPassengers", numPassengers);
+    }
+
+
+
+
+    public void ComputeCost(View view) {
+        numPassengers = Integer.parseInt(etTickets.getText().toString());
+        destination = spinner.getSelectedItem().toString();
+        double cost = 0;
+        switch (destination) {
+            case "To Catalina Island":
+                cost = numPassengers * 34.00;
+                break;
+            case "To Long Beach":
+                cost = numPassengers * 40.00;
+                break;
+
+        }
+
+        output_text.setText("One way trip to " + destination + " for " + numPassengers + " passengers: $" + cost);
+        output_text.setVisibility(View.VISIBLE);
+    }
+
+
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            destination = savedInstanceState.getString("destination", "");
+            numPassengers = savedInstanceState.getInt("numPassengers", 0);
+
+            double cost = 0;
+
+            switch (destination) {
+                case "To Catalina Island":
+                    cost = numPassengers * 34.00;
+                    break;
+                case "To Long Beach":
+                    cost = numPassengers * 40.00;
+                    break;
+
+            }
+
+
+            etTickets.setText(String.valueOf(numPassengers));
+            output_text.setText("One way trip to " + destination + " for " + numPassengers + " passengers: $" + cost);
+
+        }
+
+    }
+
+}
+
+
+
+
+
+package com.example.practicelab1;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+
+    int numPassengers ;
+    String destination;
+
+
+    private EditText etTickets;
+    private Spinner spinner;
+    private Button computeCostBtn;
+    private TextView output_text;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etTickets = findViewById(R.id.etTickets);
+        spinner = findViewById(R.id.spinner);
+        output_text = findViewById(R.id.output_text);
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // use those elements that you need to save.
+
+        outState.putString("destination", destination);
+        outState.putInt("numPassengers", numPassengers);
+    }
+
+
+
+
+    public void ComputeCost(View view) {
+        numPassengers = Integer.parseInt(etTickets.getText().toString());
+        destination = spinner.getSelectedItem().toString();
+        double cost = 0;
+        switch (destination) {
+            case "To Catalina Island":
+                cost = numPassengers * 34.00;
+                break;
+            case "To Long Beach":
+                cost = numPassengers * 40.00;
+                break;
+
+        }
+
+        output_text.setText("One way trip to " + destination + " for " + numPassengers + " passengers: $" + cost);
+        output_text.setVisibility(View.VISIBLE);
+    }
+
+
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            destination = savedInstanceState.getString("destination", "");
+            numPassengers = savedInstanceState.getInt("numPassengers", 0);
+
+            double cost = 0;
+
+            switch (destination) {
+                case "To Catalina Island":
+                    cost = numPassengers * 34.00;
+                    break;
+                case "To Long Beach":
+                    cost = numPassengers * 40.00;
+                    break;
+
+            }
+
+
+            etTickets.setText(String.valueOf(numPassengers));
+            output_text.setText("One way trip to " + destination + " for " + numPassengers + " passengers: $" + cost);
+
+        }
+
+    }
+
+}
+
+
+
+
+
