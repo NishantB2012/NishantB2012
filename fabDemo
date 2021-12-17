@@ -1,0 +1,191 @@
+//Mainactivity
+package com.example.finalexam;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText carPriceEdiText, downPaymentEditText;
+    private RadioButton Rb1, Rb2, Rb3;
+    private int loanTerm=3; // using the default checked option
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        carPriceEdiText = findViewById(R.id.carPriceEditText);
+        downPaymentEditText = findViewById(R.id.downPaymentEditText);
+
+        Rb1 = findViewById(R.id.radioBtn1);
+        Rb2 = findViewById(R.id.radioBtn2);
+        Rb3 = findViewById(R.id.radioBtn3);
+    }
+
+    public void showResult(View view) {
+        Intent intent = new Intent(this, LoanSummaryActivity.class);
+
+        intent.putExtra("carPrice", carPriceEdiText.getText().toString());
+        intent.putExtra("downPayment", downPaymentEditText.getText().toString());
+        intent.putExtra("loanTerm", loanTerm);
+
+        startActivity(intent);
+    }
+
+    public void loanTermChanged(View view) {
+        switch(view.getId()){
+            case R.id.radioBtn1:
+                loanTerm = 2;
+                break;
+            case R.id.radioBtn2:
+                loanTerm = 3;
+                break;
+            case R.id.radioBtn3:
+                loanTerm = 4;
+                break;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("carPrice", carPriceEdiText.getText().toString());
+        outState.putString("downPayment", downPaymentEditText.getText().toString());
+        outState.putInt("loanTerm", loanTerm);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState != null){
+            carPriceEdiText.setText(savedInstanceState.getString("carPrice", ""));
+            downPaymentEditText.setText(savedInstanceState.getString("downPayment", ""));
+            int loanTerm = savedInstanceState.getInt("loanTerm", 3);
+            switch (loanTerm){
+                case 2:
+                    Rb1.setChecked(true);
+                    break;
+                case 3:
+                    Rb2.setChecked(true);
+                    break;
+                case 4:
+                    Rb3.setChecked(true);
+                    break;
+            }
+        }
+    }
+}
+
+
+------
+Second Activity
+
+package com.example.finalexam;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.view.View;
+import android.widget.TextView;
+
+public class LoanSummaryActivity extends AppCompatActivity {
+
+    final double taxRate = 0.07;
+    final double interestRate = 0.09; // annually
+    private double carPrice, downPayment, loanTerm, taxAmt, totalCost, borrowedAmt,
+            interestAmt, monthlyPayment;
+    private String carPriceString, downPaymentString;
+    private TextView monthlyPaymentTextView, stickerPriceTextView, downPaymentTextView,
+            taxAmtTextView, totalCostTextView, borrowedAmtTextView, interestAmtTextView,
+            loanTermTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_loan_summary);
+
+        Intent intent = getIntent();
+
+        carPriceString = intent.getStringExtra("carPrice");
+        downPaymentString = intent.getStringExtra("downPayment");
+        loanTerm = intent.getIntExtra("loanTerm", 3);
+
+
+        if (!carPriceString.equals("")) {
+            carPrice = Double.parseDouble(carPriceString);
+            downPayment = Double.parseDouble(downPaymentString);
+
+            monthlyPaymentTextView = findViewById(R.id.monthlyPaymentTextView);
+            stickerPriceTextView = findViewById(R.id.stickerPriceTextView);
+            downPaymentTextView = findViewById(R.id.downPaymentTextView);
+            taxAmtTextView = findViewById(R.id.taxAmtTextView);
+            totalCostTextView = findViewById(R.id.totalCostTextView);
+            borrowedAmtTextView = findViewById(R.id.borrowedAmtTextView);
+            interestAmtTextView = findViewById(R.id.interestAmtTextView);
+            loanTermTextView = findViewById(R.id.loanTermTextView);
+
+            calculateLoan();
+            displayDetails();
+        }
+    }
+
+    private void displayDetails() {
+        monthlyPaymentTextView.setText("$ " + String.format("%.2f", monthlyPayment));
+        stickerPriceTextView.setText(String.format("%.2f", carPrice));
+        downPaymentTextView.setText(String.format("%.2f", downPayment));
+        taxAmtTextView.setText(String.format("%.2f", taxAmt));
+        totalCostTextView.setText(String.format("%.2f", totalCost));
+        borrowedAmtTextView.setText(String.format("%.2f", borrowedAmt));
+        interestAmtTextView.setText(String.format("%.2f", interestAmt));
+
+
+        loanTermTextView.setText(new StringBuilder().append("Loan Term is ").append(String.format("%.0f", loanTerm)).append(" years").toString());
+    }
+
+    private void calculateLoan() {
+        taxAmt = taxRate * carPrice;
+        totalCost = carPrice + taxAmt;
+        borrowedAmt = totalCost - downPayment;
+        interestAmt = borrowedAmt * interestRate * loanTerm; // Simple interest = P * r * t;
+        monthlyPayment = (borrowedAmt + interestAmt)/(loanTerm*12);
+    }
+
+    public void returnToMain(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        if(!carPriceString.equals("")){
+            outState.putString("carPrice", carPriceString);
+            outState.putString("downPayment", downPaymentString);
+            outState.putDouble("loanTerm", loanTerm);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        carPriceString = savedInstanceState.getString("carPrice", "");
+        downPaymentString = savedInstanceState.getString("downPayment", "");
+        loanTerm = savedInstanceState.getDouble("loanTerm", 3);
+        calculateLoan();
+        displayDetails();
+    }
+
+    
+}
